@@ -25,7 +25,7 @@ VEL_X = 5 # frames per second velocity of animated sprite on x axis
 VEL_y = 5 # frames per second velocity of animated sprite on y axis
 
 # animation sequences
-NINJA_IMAGE_PATHS = ["../image/" + image_name for image_name in os.listdir("../image")]
+NINJA_IMAGE_PATHS = ["../image/ninja/" + image_name for image_name in os.listdir("../image/ninja")]
 NINJA_IMAGES_RIGHT = list(map(pg.image.load,NINJA_IMAGE_PATHS))
 NINJA_IMAGES_LEFT = [pg.transform.flip(ninja_image,True,False) for ninja_image in NINJA_IMAGES_RIGHT]
 NINJA_ANIMATIONS = {True:{LEFT: NINJA_IMAGES_LEFT,
