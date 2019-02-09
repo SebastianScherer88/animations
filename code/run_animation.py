@@ -25,7 +25,8 @@ def main():
     # initialize animated sprite
     animated_sprites = Group()
     animated_sprite = AnimatedSprite(animated_sprites,
-                                     image_sequences = NINJA_ANIMATIONS,
+                                     #image_sequences = NINJA_ANIMATIONS,
+                                     image_sequences = WALK_ANIMATIONS,
                                      pos = (WINDOW_WIDTH/2, WINDOW_HEIGHT/2) # put sprite in center of window
                                      )
     
