@@ -26,7 +26,8 @@ def main():
     animated_sprites = Group()
     animated_sprite = AnimatedSprite(animated_sprites,
                                      #image_sequences = NINJA_ANIMATIONS,
-                                     image_sequences = WALK_ANIMATIONS,
+                                     #image_sequences = WALK_ANIMATIONS,
+                                     image_sequences = STICK_ANIMATIONS,
                                      pos = (WINDOW_WIDTH/2, WINDOW_HEIGHT/2) # put sprite in center of window
                                      )
     
@@ -41,27 +42,31 @@ def main():
         for event in events:
             if event.type == pg.QUIT:                    
                 quit_event = True
+            elif event.type == pg.KEYDOWN and event.key == pg.K_SPACE:
+                animated_sprite.set_status(PUNCHING) # start punching animation in controlled way
+                animated_sprite.vel.x = 0 # set positioning attribute - pnching makes you stop
 
         if quit_event == True:
             break                    
-                    
-        # handle keys pressed
-        keys_pressed = pg.key.get_pressed()
         
-        if keys_pressed[pg.K_RIGHT] and not keys_pressed[pg.K_LEFT]:
-            # move right
-            animated_sprite.moving = True
-            animated_sprite.direction = RIGHT # set animation attribute 
-            animated_sprite.vel.x = VEL_X # set positioning attribute
-        elif keys_pressed[pg.K_LEFT] and not keys_pressed[pg.K_RIGHT]:
-            # move left
-            animated_sprite.moving = True
-            animated_sprite.direction = LEFT # set animation attribute
-            animated_sprite.vel.x = -VEL_X # set positioning attribute
-        elif (keys_pressed[pg.K_LEFT] and keys_pressed[pg.K_RIGHT]) or (not keys_pressed[pg.K_LEFT] and not keys_pressed[pg.K_RIGHT]):
-            # stop moving
-            animated_sprite.moving = False # set animation attribute
-            animated_sprite.vel.x = 0 # set positioning attribute
+        # if sprite is not punching (has highest priority), check for other keyobard input
+        if animated_sprite.status != PUNCHING:
+            # handle keys pressed
+            keys_pressed = pg.key.get_pressed()
+            
+            if keys_pressed[pg.K_RIGHT] and not keys_pressed[pg.K_LEFT]:
+                animated_sprite.set_status(WALKING) # start walking right animation in controlled way
+                animated_sprite.direction = RIGHT # set animation attribute 
+                animated_sprite.vel.x = VEL_X # set positioning attribute
+            elif keys_pressed[pg.K_LEFT] and not keys_pressed[pg.K_RIGHT]:
+                # move left
+                if animated_sprite.status != WALKING:
+                    animated_sprite.set_status(WALKING) # start walking left animation in controlled way
+                animated_sprite.direction = LEFT # set animation attribute
+                animated_sprite.vel.x = -VEL_X # set positioning attribute
+            elif (keys_pressed[pg.K_LEFT] and keys_pressed[pg.K_RIGHT]) or (not keys_pressed[pg.K_LEFT] and not keys_pressed[pg.K_RIGHT]):
+                animated_sprite.set_status(STANDING) # set standing animation in a controlled way
+                animated_sprite.vel.x = 0 # set positioning attribute
             
         # update sprite
         animated_sprites.update()
